@@ -1,0 +1,13 @@
+- id: "protected:api:session"
+  upstream:
+    url: "http://backend:8080"
+  match:
+    url: "http://localhost:4455/api/<**>"
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+  authenticators:
+    - handler: cookie_session
+    - handler: oauth2_introspection
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: header
