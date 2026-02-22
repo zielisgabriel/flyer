@@ -1,4 +1,4 @@
-# Flyer - DDD
+# 💬 Flyer | DDD
 
 Este documento descreve os domínios e contextos que compõem o ecossistema do **Flyer**, estabelecendo as regras de negócio e os limites de cada módulo.
 
