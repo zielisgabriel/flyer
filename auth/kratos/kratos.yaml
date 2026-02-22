@@ -1,0 +1,101 @@
+version: v1.3.0
+
+dsn: ${DSN:memory}
+
+serve:
+  public:
+    base_url: http://localhost:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://localhost:3000
+        - http://127.0.0.1:3000
+      allowed_methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+        - X-Session-Token
+      allow_credentials: true
+  admin:
+    base_url: http://kratos:4434/
+
+selfservice:
+  default_browser_return_url: http://localhost:3000/feed
+  allowed_return_urls:
+    - http://localhost:3000
+    - http://localhost:3000/feed
+
+  methods:
+    password:
+      enabled: true
+      config:
+        haveibeenpwned_enabled: false
+        min_password_length: 8
+        identifier_similarity_check_enabled: true
+
+  flows:
+    error:
+      ui_url: http://localhost:3000/error
+
+    settings:
+      ui_url: http://localhost:3000/settings
+      privileged_session_max_age: 15m
+      required_aal: highest_available
+
+    logout:
+      after:
+        default_browser_return_url: http://localhost:3000/login
+
+    login:
+      ui_url: http://localhost:3000/login
+      lifespan: 1h
+      after:
+        default_browser_return_url: http://localhost:3000/feed
+
+    registration:
+      lifespan: 1h
+      ui_url: http://localhost:3000/register
+      after:
+        default_browser_return_url: http://localhost:3000/feed
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: argon2
+  argon2:
+    iterations: 4
+    memory: "64MB"
+    salt_length: 16
+    key_length: 32
+    expected_duration: "500ms"
+    expected_deviation: "500ms"
+    dedicated_memory: "1GB"
+
+identity:
+  default_schema_id: default
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
+session:
+  lifespan: "24h"
+  whoami:
+    required_aal: highest_available
+  cookie:
+    name: flyer_session
+    domain: localhost
+    same_site: Lax
+
+feature_flags:
+  use_continue_with_transitions: false
