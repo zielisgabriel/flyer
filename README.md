@@ -13,6 +13,7 @@ Explore os detalhes técnicos e as regras de negócio do projeto:
 
 * **[Domain-Driven Design (DDD)](/docs/DDD.md)**: Entenda os contextos delimitados, agregados e as regras de domínio.
 * **[Especificações Técnicas](/docs/TECHNICAL.md)**: Detalhes sobre stack, arquitetura de software e infraestrutura.
+* **[Início Rápido](/docs/QUICK_START.md)**: Início rápido da aplicação em ambiente de desenvolvimento (ambiente de staging em breve).
 
 ---
 
