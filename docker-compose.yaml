@@ -1,0 +1,133 @@
+volumes:
+  psql_kratos_volume:
+  psql_hydra_volume:
+
+networks:
+  flyer_network:
+    driver: bridge
+
+services:
+  # ============================================================
+  # ORY | DATABASES (POSTGRESQL)
+  # ============================================================
+  psql_kratos:
+    image: postgres:17-alpine
+    container_name: flyer_kratos_psql
+    networks:
+      - flyer_network
+    environment:
+      POSTGRES_PASSWORD: kratos_password
+      POSTGRES_USER: kratos_username
+      POSTGRES_DB: kratos_db
+    volumes:
+      - type: volume
+        source: psql_kratos_volume
+        target: /var/lib/postgresql/data
+        read_only: false
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kratos_username -d kratos_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  psql_hydra:
+    image: postgres:17-alpine
+    container_name: flyer_hydra_psql
+    networks:
+      - flyer_network
+    environment:
+      POSTGRES_PASSWORD: hydra_password
+      POSTGRES_USER: hydra_username
+      POSTGRES_DB: hydra_db
+    volumes:
+      - type: volume
+        source: psql_hydra_volume
+        target: /var/lib/postgresql/data
+        read_only: false
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hydra_username -d hydra_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================
+  # ORY KRATOS — Identity Management
+  # ============================================================
+  kratos_migrate:
+    image: oryd/kratos:v25.4.0
+    container_name: flyer_kratos_migrate
+    networks:
+      - flyer_network
+    environment:
+      DSN: postgresql://kratos_username:kratos_password@psql_kratos:5432/kratos_db?sslmode=disable
+      WEB_URL: http://localhost:3000
+      SECRETS_COOKIE: 7aa592d756d96c4e0ccfcb6bd70bfa846075237fcbd720439238e455d04b9603
+      SECRETS_CIPHER: aB3dE6fH9jK2mN5pQ8rT1vW4yZ7xC0ua
+    depends_on:
+      psql_kratos:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./auth/kratos
+        target: /etc/config/kratos
+    command: ["migrate", "sql", "-e", "-y", "-c", "/etc/config/kratos/kratos.yaml"]
+
+  kratos:
+    image: oryd/kratos:v25.4.0
+    container_name: flyer_kratos
+    networks:
+      - flyer_network
+    environment:
+      DSN: postgresql://kratos_username:kratos_password@psql_kratos:5432/kratos_db?sslmode=disable
+      WEB_URL: http://localhost:3000
+      SECRETS_COOKIE: 7aa592d756d96c4e0ccfcb6bd70bfa846075237fcbd720439238e455d04b9603
+      SECRETS_CIPHER: aB3dE6fH9jK2mN5pQ8rT1vW4yZ7xC0ua
+    depends_on:
+      kratos_migrate:
+        condition: service_completed_successfully
+    ports:
+      - "4433:4433"
+      - "4434:4434"
+    volumes:
+      - type: bind
+        source: ./auth/kratos
+        target: /etc/config/kratos
+    command: ["serve", "-c", "/etc/config/kratos/kratos.yaml", "--dev"]
+
+  # ============================================================
+  # ORY HYDRA — OAuth 2.0 / OIDC Provider
+  # ============================================================
+  hydra_migrate:
+    image: oryd/hydra:v25.4.0
+    container_name: flyer_hydra_migrate
+    networks:
+      - flyer_network
+    environment:
+      DSN: postgresql://hydra_username:hydra_password@psql_hydra:5432/hydra_db?sslmode=disable
+    depends_on:
+      psql_hydra:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./auth/hydra
+        target: /etc/config/hydra
+    command: ["migrate", "sql", "-e", "-y", "-c", "/etc/config/hydra/hydra.yaml"]
+
+  hydra:
+    image: oryd/hydra:v25.4.0
+    container_name: flyer_hydra
+    networks:
+      - flyer_network
+    environment:
+      DSN: postgresql://hydra_username:hydra_password@psql_hydra:5432/hydra_db?sslmode=disable
+    depends_on:
+      hydra_migrate:
+        condition: service_completed_successfully
+    ports:
+      - "4444:4444"
+      - "4445:4445"
+    volumes:
+      - type: bind
+        source: ./auth/hydra
+        target: /etc/config/hydra
+    command: ["serve", "all", "--dev", "-c", "/etc/config/hydra/hydra.yaml"]
