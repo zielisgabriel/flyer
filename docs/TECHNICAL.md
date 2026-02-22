@@ -18,6 +18,17 @@ Este documento detalha a stack tecnológica, a infraestrutura e as escolhas arqu
 * **ShadcnUI**: Base de componentes de UI acessíveis e altamente customizáveis.
 * **Zod**: Esquemas de validação de dados tipados e integrados ao ecossistema Next.js.
 
+### **Authentication Server**
+* **Ory Kratos**: Servidor de gerenciamento de identidades.
+* **Ory Hydra**: Servidor de OAuth2 e OpenID Connect.
+* **Ory Oathkeeper**: Proxy de acesso como guard que fica entre a application/web e resouce server.
+* **Ory Keto**: Servidor de gerenciamento de autorização de usuários.
+
+## **Databases**
+* **PostgreSQL**
+* **Cassandra**
+* **Neo4j**
+
 ---
 
 ## 🗄️ Estratégia de Persistência (Polyglot Persistence)
@@ -41,3 +52,17 @@ O Flyer utiliza diferentes modelos de dados para atender aos requisitos específ
 
 ## 🏗️ Padrões de Arquitetura
 O projeto segue os princípios da **Clean Architecture** combinados com **DDD**, garantindo que a lógica de negócio seja independente de frameworks e bancos de dados.
+
+## Entidades
+
+* **User**:
+  * Email:
+    - Mínimo 3 caracteres.
+  * Username: 
+  ```^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$```
+    - Contêm apenas letras (maiúsculas/minúsculas) e números.
+    - Permitem espaço, underscore (_) ou hífen (-) como separadores.
+    Não começam nem terminam com espaço, underscore ou hífen.
+    - Não permitem separadores consecutivos.
+  * Password:
+    - 
