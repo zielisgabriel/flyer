@@ -30,6 +30,7 @@ selfservice:
   allowed_return_urls:
     - http://localhost:3000
     - http://localhost:3000/feed
+    - http://localhost:3000/login
 
   methods:
     password:
