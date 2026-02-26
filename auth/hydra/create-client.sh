@@ -9,9 +9,9 @@ hydra create oauth2-client \
   --name "Flyer Web App" \
   --grant-type authorization_code,refresh_token \
   --endpoint http://localhost:4445 \
-  --response-type id_token \
-  --scope openid,offline_access,profile,username \
-  --redirect-uri http://localhost:3000/api/auth/callback \
+  --response-type code \
+  --scope openid,offline_access,profile,email \
+  --redirect-uri http://localhost:3000/api/auth/callback/ory-hydra \
   --token-endpoint-auth-method client_secret_post \
   --format json > /tmp/client.json
 
