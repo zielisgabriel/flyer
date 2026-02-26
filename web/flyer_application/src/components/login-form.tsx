@@ -2,7 +2,7 @@
 
 import { ory } from "@/lib/ory"
 import { LoginFlow, UiNodeInputAttributes } from "@ory/client"
-import { redirect, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
@@ -29,7 +29,7 @@ export function LoginForm() {
         })
         .catch((err) => console.error("Erro ao buscar o fluxo:", err))
     } else {
-      redirect("http://localhost:4433/self-service/login/browser")
+      window.location.href = "http://localhost:4433/self-service/login/browser"
     }
   }, [flowId])
 
