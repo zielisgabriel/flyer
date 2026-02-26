@@ -25,8 +25,8 @@ urls:
   error: http://localhost:3000/error
   post_logout_redirect: http://localhost:3000/login
   identity_provider:
-    url: http://kratos:4434/admin
-    publicUrl: https://kratos/public
+    url: http://kratos:4434
+    publicUrl: http://localhost:4433
 
 secrets:
   system:
