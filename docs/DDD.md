@@ -18,7 +18,7 @@ Responsável pela segurança, credenciais e integridade do acesso à plataforma.
 Gerencia a persona do usuário e suas interações dentro da rede.
 
 ### **Perfil (Aggregate Root)**
-* **Definição:** A identidade pública e social do usuário. Contém biografia, avatar e métricas de engajamento.
+* **Definição:** A identidade pública e social do usuário. Contém nome de usuário, informações do usuário, biografia, avatar.
 * **Responsabilidades:** Gerenciar seguidores, seguidos e preferências de exibição.
 
 ### **Relacionamento (Use Case)**
