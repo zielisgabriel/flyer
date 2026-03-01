@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/flyer_db"
+    username: "api_username"
+    password: "api_password"
+  cassandra:
+    keyspace-name: "flyer_keyspace"
+    contact-points: "localhost:9042"
+    local-datacenter: "flyer_datacenter"
+  neo4j:
+    uri: "bolt://localhost:7687"
+    authentication:
+      username: "neo4j"
+      password: "api_password"
+  
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: "http://localhost:4445/admin/oauth2/introspect"
+          client-id: "88c3e8d1-3d1e-4a3b-a649-7ece7da84bfe"
+          client-secret: "TCEwnZJaCJLefnnJl6CYmBCyPV"
