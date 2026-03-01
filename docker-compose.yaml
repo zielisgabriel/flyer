@@ -131,3 +131,56 @@ services:
         source: ./auth/hydra
         target: /etc/config/hydra
     command: ["serve", "all", "--dev", "-c", "/etc/config/hydra/hydra.yaml"]
+
+  # ============================================================
+  # API Context
+  # ============================================================
+  psql_api:
+    image: postgres:17-alpine
+    container_name: flyer_psql_api
+    environment:
+      POSTGRES_DB: flyer_db
+      POSTGRES_USER: api_username
+      POSTGRES_PASSWORD: api_password
+    networks:
+      - flyer_network
+    ports:
+      - "5432:5432"
+
+  cassandra_api:
+    image: cassandra:5.0.6
+    container_name: flyer_cassandra_api
+    networks:
+      - flyer_network
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_DC: flyer_datacenter
+      CASSANDRA_CLUSTER_NAME: flyer_cluster
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  cassandra_init:
+    image: cassandra:5.0.6
+    container_name: flyer_cassandra_init
+    networks:
+      - flyer_network
+    depends_on:
+      cassandra_api:
+        condition: service_healthy
+    volumes:
+      - ./api/flyer_api/cassandra_init.cql:/cassandra_init.cql
+    command: cqlsh cassandra_api -f /cassandra_init.cql
+
+  neo4j_api:
+    image: neo4j
+    container_name: flyer_neo4j_api
+    networks:
+      - flyer_network
+    ports:
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "neo4j/api_password"
