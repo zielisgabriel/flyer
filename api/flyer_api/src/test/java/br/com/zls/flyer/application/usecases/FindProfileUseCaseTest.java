@@ -16,12 +16,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import br.com.zls.flyer.domain.entities.Profile;
 import br.com.zls.flyer.domain.exceptions.InvalidBirthdayDateException;
 import br.com.zls.flyer.domain.repositories.ProfileRepository;
 import br.com.zls.flyer.domain.valueobjects.BirthdayDate;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class FindProfileUseCaseTest {
 
