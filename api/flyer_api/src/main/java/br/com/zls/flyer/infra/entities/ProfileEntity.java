@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import br.com.zls.flyer.domain.entities.Profile;
-import br.com.zls.flyer.domain.exceptions.InvalidBirthdayDateException;
 import br.com.zls.flyer.domain.valueobjects.BirthdayDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
