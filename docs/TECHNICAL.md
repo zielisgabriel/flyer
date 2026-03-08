@@ -8,7 +8,7 @@ Este documento detalha a stack tecnológica, a infraestrutura e as escolhas arqu
 
 ### **Back-end (Core API)**
 * **Java 25** & **Spring Boot 4+**: Base da aplicação, utilizando o ecossistema Spring para alta produtividade e segurança.
-* **Spring Security & OAuth2**: Proteção de endpoints e integração com provedores de identidade.
+* **Spring Security & OAuth2 Resource Server**: Proteção de endpoints e integração com provedores de identidade.
 * **Spring Boot - WebSocket**: Comunicação bidirecional em tempo real para o Contexto de Mensagens.
 * **Spring Validation (Hibernate Validator)**: Garantia da integridade dos dados via Bean Validation.
 
@@ -19,10 +19,7 @@ Este documento detalha a stack tecnológica, a infraestrutura e as escolhas arqu
 * **Zod**: Esquemas de validação de dados tipados e integrados ao ecossistema Next.js.
 
 ### **Authentication Server**
-* **Ory Kratos**: Servidor de gerenciamento de identidades.
-* **Ory Hydra**: Servidor de OAuth2 e OpenID Connect.
-* **Ory Oathkeeper**: Proxy de acesso como guard que fica entre a application/web e resouce server.
-* **Ory Keto**: Servidor de gerenciamento de autorização de usuários.
+* **Keycloak**: Servidor de IAM.
 
 ## **Databases**
 * **PostgreSQL**
