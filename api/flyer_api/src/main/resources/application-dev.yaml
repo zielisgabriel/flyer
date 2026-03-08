@@ -1,6 +1,9 @@
+server:
+  port: 8000
+
 spring:
   datasource:
-    url: "jdbc:postgresql://localhost:5432/flyer_db"
+    url: "jdbc:postgresql://localhost:5433/flyer_db"
     username: "api_username"
     password: "api_password"
   cassandra:
@@ -16,7 +19,5 @@ spring:
   security:
     oauth2:
       resourceserver:
-        opaquetoken:
-          introspection-uri: "http://localhost:4445/admin/oauth2/introspect"
-          client-id: "88c3e8d1-3d1e-4a3b-a649-7ece7da84bfe"
-          client-secret: "TCEwnZJaCJLefnnJl6CYmBCyPV"
+        jwt:
+          issuer-uri: http://localhost:8080/realms/flyer
