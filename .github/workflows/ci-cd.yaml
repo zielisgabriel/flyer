@@ -23,7 +23,10 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+
+      - name: Setup Docker Compose
+        run: docker compose --profile auth --profile api up -d
         
       - name: Build with Gradle
-        working-directory: api/flyer_api
+        working-directory: ./api/flyer_api
         run: ./gradlew build
