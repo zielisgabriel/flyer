@@ -25,4 +25,5 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
         
       - name: Build with Gradle
+        working-directory: api/flyer_api
         run: ./gradlew build
